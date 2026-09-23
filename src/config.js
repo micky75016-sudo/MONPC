@@ -154,7 +154,7 @@ window.WEBOS_CONFIG = {
       "label": "Voila AI",
       "url": "https://www.getvoila.ai/chat",
       "favicon": "https://www.getvoila.ai",
-      "locked": true
+      "locked": false
     },
     "separator",
     {
