@@ -148,13 +148,13 @@ window.WEBOS_CONFIG = {
       "label": "Claude",
       "url": "https://claude.ai",
       "favicon": "claude.ai",
-      "locked": true
+      "locked": false
     },
     {
       "label": "ChatGPT",
       "url": "https://chatgpt.com",
       "favicon": "chatgpt.com",
-      "locked": true
+      "locked": false
     },
     "separator",
     {
