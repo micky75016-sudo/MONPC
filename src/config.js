@@ -148,7 +148,7 @@ window.WEBOS_CONFIG = {
       "label": "Claude",
       "url": "https://claude.ai",
       "favicon": "claude.ai",
-      "locked": true
+      "locked": false
     },
     {
       "label": "Voila AI",
