@@ -1,12 +1,47 @@
 // ─────────────────────────────────────────────────────────────────────
+// Configurations & Assets globaux
+// ─────────────────────────────────────────────────────────────────────
+const ALL_APPS_ICON = 'media/icons/all-apps.svg';
+
+// Icône SVG par défaut pour les dossiers du bureau
+const FOLDER_ICON_SVG = '<svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="#e0a96d" width="48" height="48"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
+
+// ─────────────────────────────────────────────────────────────────────
 // Desktop icon element factory
 // ─────────────────────────────────────────────────────────────────────
 function makeIconEl(item) {
-	return el('a', { class: 'desktop-icon', href: item.url, target: '_blank', rel: 'noopener noreferrer', data: { key: item.key } },
+	const isFolder = item.type === 'folder';
+	const href = isFolder ? '#' : item.url;
+	const target = isFolder ? '_self' : '_blank';
+
+	const iconLink = el('a', { 
+		class: `desktop-icon ${isFolder ? 'is-folder' : ''}`, 
+		href: href, 
+		target: target, 
+		rel: 'noopener noreferrer', 
+		data: { key: item.key } 
+	},
 		el('button', { class: 'icon-delete', text: '✕', data: { key: item.key } }),
-		el('div', { class: 'icon-img-wrap' }, iconArt(item.favicon)),
+		el('div', { class: 'icon-img-wrap' }),
 		el('span', { class: 'desktop-icon-label', text: item.label }),
 	);
+
+	const imgWrap = iconLink.querySelector('.icon-img-wrap');
+	
+	if (isFolder) {
+		imgWrap.innerHTML = FOLDER_ICON_SVG;
+		// Événement d'ouverture au clic sur un dossier (si pas en mode édition)
+		iconLink.addEventListener('click', (e) => {
+			if (!desktopEditing) {
+				e.preventDefault();
+				openFolder(item);
+			}
+		});
+	} else {
+		imgWrap.appendChild(iconArt(item.favicon));
+	}
+
+	return iconLink;
 }
 
 // ─────────────────────────────────────────────────────────────────────
@@ -29,13 +64,6 @@ function renderDesktopIcons() {
 // ─────────────────────────────────────────────────────────────────────
 // Render: dock
 // ─────────────────────────────────────────────────────────────────────
-// All-Bookmarks launcher uses the site's own favicon (a 3×3 grid),
-// rendered through the same tile pipeline as every other icon.
-const ALL_APPS_ICON = 'media/icons/all-apps.svg';
-
-// Locked items can't be deleted or dragged out. The flag lives on the item, but
-// is also honoured from the default config so a saved dock that predates the
-// flag still keeps its defaults locked.
 function isLockedDockItem(item) {
 	return item.locked || CFG.dock.some(d => d !== 'separator' && d.url === item.url && d.locked);
 }
@@ -73,6 +101,15 @@ function enterDesktopEdit() {
 	btn.classList.add('active'); btn.textContent = 'Done Editing';
 }
 
+// ─────────────────────────────────────────────────────────────────────
+// Interaction : Dossiers
+// ─────────────────────────────────────────────────────────────────────
+function openFolder(folderItem) {
+	// Fonction à adapter selon le gestionnaire de fenêtres existant de votre projet.
+	console.log(`Ouverture du dossier : ${folderItem.label}`, folderItem.children);
+	alert(`Ouverture du dossier : ${folderItem.label}\nContenu : ${folderItem.children.length} éléments.`);
+}
+
 function exitDesktopEdit() {
 	desktopEditing = false;
 	$('desktop').classList.remove('editing');
@@ -93,8 +130,34 @@ function addDesktopIcon(label, url) {
 	const domain = domainFrom(url);
 	if (S.desktopIcons.some(i => i.url === url)) return false;
 	const { col, row } = nextFreeCell(occupiedCells());
-	S.desktopIcons.push({ key: 'icon-' + domain.replace(/\./g,'-') + '-' + Date.now(), label, url, favicon: domain, col, row });
+	S.desktopIcons.push({ 
+		key: 'icon-' + domain.replace(/\./g,'-') + '-' + Date.now(), 
+		type: 'link',
+		label, 
+		url, 
+		favicon: domain, 
+		col, 
+		row 
+	});
 	saveState(); renderDesktopIcons(); return true;
+}
+
+function addDesktopFolder(label = 'Nouveau Dossier') {
+	const { col, row } = nextFreeCell(occupiedCells());
+	const folderKey = 'folder-' + Date.now();
+	
+	S.desktopIcons.push({
+		key: folderKey,
+		type: 'folder',
+		label: label,
+		col: col,
+		row: row,
+		children: []
+	});
+	
+	saveState(); 
+	renderDesktopIcons(); 
+	return true;
 }
 
 // ─────────────────────────────────────────────────────────────────────
@@ -109,6 +172,10 @@ function moveDesktopIconToDock(key) {
 	const idx = S.desktopIcons.findIndex(i => i.key === key);
 	if (idx < 0) return;
 	const icon = S.desktopIcons[idx];
+	
+	// Empêcher de mettre un dossier complet directement dans le dock (optionnel)
+	if (icon.type === 'folder') return;
+
 	S.desktopIcons.splice(idx, 1);
 	if (!S.dock.some(i => i !== 'separator' && i.url === icon.url)) {
 		S.dock.push({ label: icon.label, url: icon.url, favicon: icon.favicon });
@@ -214,175 +281,3 @@ function setupDesktopIconDrag() {
 let dockDragging = false;
 
 function setupDockDrag() {
-	const dock = $('dock');
-	let active = false, srcDockIdx = -1, tgtDockIdx = -1, dragEl = null, dragClone = null, overOut = false;
-
-	dock.addEventListener('pointerdown', e => {
-		if (!desktopEditing) return;
-		const icon = e.target.closest('.dock-icon[data-dock-idx]');
-		if (!icon || e.target.closest('.dock-icon-delete')) return;
-		e.preventDefault();
-		srcDockIdx = tgtDockIdx = parseInt(icon.dataset.dockIdx);
-		dragEl = icon; active = true; dockDragging = true;
-		const r = icon.getBoundingClientRect();
-		dragClone = makeDragClone(icon, r);
-		icon.style.opacity = '0';
-		dock.setPointerCapture(e.pointerId);
-	});
-
-	dock.addEventListener('pointermove', e => {
-		if (!active || !dragClone) return;
-		e.preventDefault();
-		dragClone.style.left = (e.clientX - dragClone.offsetWidth  / 2) + 'px';
-		dragClone.style.top  = (e.clientY - dragClone.offsetHeight / 2) + 'px';
-		dragClone.style.visibility = 'hidden';
-		const under = document.elementFromPoint(e.clientX, e.clientY);
-		dragClone.style.visibility = '';
-
-		overOut = !(under && under.closest('#dock'));
-		if (overOut) {
-			dock.querySelectorAll('.dock-icon').forEach(el => el.classList.remove('drag-over'));
-			return;
-		}
-
-		const target = under && under.closest('.dock-icon[data-dock-idx]');
-		if (target && target !== dragEl) {
-			const ni = parseInt(target.dataset.dockIdx);
-			if (ni !== tgtDockIdx && !isNaN(ni)) {
-				dock.querySelectorAll('.dock-icon').forEach(el => el.classList.remove('drag-over'));
-				target.classList.add('drag-over');
-				tgtDockIdx = ni;
-			}
-		}
-	});
-
-	function endDockDrag() {
-		if (!active) return;
-		active = false; dockDragging = false;
-		const fSrc = srcDockIdx, fTgt = tgtDockIdx, fOut = overOut;
-		dragClone && dragClone.remove(); dragClone = null;
-		dragEl && (dragEl.style.opacity = ''); dragEl = null;
-		dock.querySelectorAll('.dock-icon').forEach(el => el.classList.remove('drag-over'));
-		srcDockIdx = tgtDockIdx = -1; overOut = false;
-
-		if (fOut && fSrc >= 0) { moveDockItemToDesktop(fSrc); return; }
-		if (fTgt !== fSrc && fTgt >= 0 && fSrc >= 0) {
-			const arr = S.dock;
-			const [item] = arr.splice(fSrc, 1);
-			arr.splice(fSrc < fTgt ? fTgt - 1 : fTgt, 0, item);
-			saveState(); renderDock();
-		}
-	}
-
-	dock.addEventListener('pointerup',          endDockDrag);
-	dock.addEventListener('lostpointercapture', endDockDrag);
-}
-
-// ─────────────────────────────────────────────────────────────────────
-// Dock magnification (macOS-style gaussian proximity scaling)
-// ─────────────────────────────────────────────────────────────────────
-function setupDockMagnification() {
-	const dock   = $('dock');
-	const MAX    = 1.48;
-	const SIGMA  = 58;
-	const LIFT   = 22;
-	const HALF   = 34;
-
-	function icons() {
-		return [...dock.querySelectorAll('.dock-icon[data-dock-idx], .dock-all-apps')];
-	}
-
-	function captureNaturalPositions() {
-		resetMag();
-		icons().forEach(icon => {
-			const r = icon.getBoundingClientRect();
-			icon.dataset.naturalCx = (r.left + r.width / 2).toFixed(1);
-		});
-	}
-
-	function applyMag(mouseX) {
-		icons().forEach(icon => {
-			const cx = parseFloat(icon.dataset.naturalCx || '0');
-			const d  = mouseX - cx;
-			const s  = 1 + (MAX - 1) * Math.exp(-(d * d) / (2 * SIGMA * SIGMA));
-			const fs = icon.dataset.pressed ? s * 0.88 : s;
-			const em = (HALF * (s - 1)).toFixed(1) + 'px';
-			icon.style.transform   = `scale(${fs.toFixed(3)}) translateY(${(-(s - 1) * LIFT).toFixed(1)}px)`;
-			icon.style.marginLeft  = em;
-			icon.style.marginRight = em;
-			icon.style.zIndex      = s > 1.15 ? '10' : '';
-		});
-	}
-
-	function resetMag() {
-		icons().forEach(icon => {
-			icon.style.willChange  = '';
-			icon.style.transform   = '';
-			icon.style.marginLeft  = '';
-			icon.style.marginRight = '';
-			icon.style.zIndex      = '';
-		});
-	}
-
-	let magRafId  = null;
-	let lastMouseX = 0;
-
-	dock.addEventListener('pointerenter', () => {
-		if (desktopEditing || dockDragging) return;
-		icons().forEach(icon => { icon.style.willChange = 'transform, margin'; });
-		captureNaturalPositions();
-	});
-	dock.addEventListener('pointermove', e => {
-		if (desktopEditing || dockDragging) { resetMag(); return; }
-		lastMouseX = e.clientX;
-		if (!magRafId) magRafId = requestAnimationFrame(() => { applyMag(lastMouseX); magRafId = null; });
-	});
-	dock.addEventListener('pointerleave', () => { if (magRafId) { cancelAnimationFrame(magRafId); magRafId = null; } resetMag(); });
-
-	dock.addEventListener('pointerdown', e => {
-		const icon = e.target.closest('.dock-icon, .dock-all-apps');
-		if (icon && !desktopEditing) { icon.dataset.pressed = '1'; applyMag(e.clientX); }
-	});
-	['pointerup', 'pointercancel'].forEach(ev => {
-		dock.addEventListener(ev, e => {
-			const icon = e.target.closest('.dock-icon, .dock-all-apps');
-			if (icon) { delete icon.dataset.pressed; applyMag(e.clientX); }
-		});
-	});
-}
-
-// ─────────────────────────────────────────────────────────────────────
-// Desktop icon press feedback
-// ─────────────────────────────────────────────────────────────────────
-function setupDesktopIconPress() {
-	const grid = $('desktopGrid');
-	grid.addEventListener('pointerdown', e => {
-		const icon = e.target.closest('.desktop-icon');
-		if (icon && !desktopEditing) icon.classList.add('pressed');
-	});
-	['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => {
-		grid.addEventListener(ev, e => {
-			const icon = e.target.closest('.desktop-icon');
-			if (icon) icon.classList.remove('pressed');
-		});
-	});
-}
-
-// ─────────────────────────────────────────────────────────────────────
-// Long-press / right-click → edit mode
-// ─────────────────────────────────────────────────────────────────────
-function setupLongPress() {
-	const desktop = $('desktop');
-	let timer = null;
-	const isBackground = e => !e.target.closest('.desktop-icon');
-
-	desktop.addEventListener('pointerdown', e => {
-		if (desktopEditing || !isBackground(e)) return;
-		timer = setTimeout(enterDesktopEdit, 500);
-	});
-	const cancel = () => { clearTimeout(timer); timer = null; };
-	desktop.addEventListener('pointermove',   cancel);
-	desktop.addEventListener('pointerup',     cancel);
-	desktop.addEventListener('pointercancel', cancel);
-	desktop.addEventListener('contextmenu',   e => { e.preventDefault(); desktopEditing ? exitDesktopEdit() : enterDesktopEdit(); });
-}
