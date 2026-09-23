@@ -151,9 +151,9 @@ window.WEBOS_CONFIG = {
       "locked": true
     },
     {
-      "label": "ChatGPT",
-      "url": "https://chatgpt.com",
-      "favicon": "chatgpt.com",
+      "label": "Voila AI",
+      "url": "https://www.getvoila.ai/chat",
+      "favicon": "https://www.getvoila.ai",
       "locked": true
     },
     "separator",
