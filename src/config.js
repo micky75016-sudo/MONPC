@@ -145,8 +145,8 @@ window.WEBOS_CONFIG = {
   ],
   "dock": [
     {
-      "label": "Claude",
-      "url": "https://claude.ai",
+      "label": "Voila AI",
+      "url": "https://www.getvoila.ai/chat",
       "favicon": "claude.ai",
       "locked": false
     },
