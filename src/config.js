@@ -7,7 +7,7 @@ window.WEBOS_CONFIG = {
   },
   "desktopIcons": [
             {
-              "label": "3D City Map Export",
+              "label": "3D City Map Exporte",
               "url": "https://app.topoexport.com/"
             },
             {
