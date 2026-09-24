@@ -1,0 +1,861 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="index, follow">
+    <title>Bureau Sormick</title>
+    <meta name="description" content="Marc Cheng (Zhongmang Cheng) — chengmarc.com">
+    <meta name="keywords" content="Marc Cheng, Zhongmang Cheng, Zhongmang Marc Cheng, chengmarc, researcher, engineer, DoubleTrends, Canadian Citizen, Hong Kong Resident, DeFi, mechanism design, protocol research, AMM, perpetual contracts, blockchain, EVM, Ethereum Virtual Machine, Solidity, opcode, backward compatibility, LLM, large language models, LLM systems, neural network interpretability, state space models, agent orchestration, agentic workflows, serverless, data engineer, data engineering, ETL, master data management, MDM, product information management, PIM, data quality, data governance, applied machine learning, PyTorch, numpy, scikit-learn, TypeScript, Node.js, Cloudflare Workers, GitHub Actions, Tailwind CSS, mathematics, statistics, probability, quantitative finance, Monte Carlo simulation, tokenization, PySpark, Hadoop, data warehousing, anti-money laundering, AML, model validation, model risk management, University of Toronto, Rexel Canada, Deloitte Canada, arXiv, Zenodo, Paragraph">
+    <meta name="author" content="Marc Cheng">
+    <link rel="canonical" href="https://chengmarc.com/">
+    <link rel="icon" type="image/svg+xml" href="media/icons/all-apps.svg">
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="Marc Cheng">
+    <meta property="og:description" content="Marc Cheng (Zhongmang Cheng) — chengmarc.com">
+    <meta property="og:url" content="https://chengmarc.com/">
+    <meta property="profile:first_name" content="Marc">
+    <meta property="profile:last_name" content="Cheng">
+    <meta property="profile:username" content="chengmarc">
+    <link rel="me" href="https://www.wikidata.org/wiki/Q138601247">
+    <link rel="me" href="https://github.com/chengmarc">
+    <link rel="me" href="https://www.linkedin.com/in/chengmarc/">
+    <link rel="me" href="https://orcid.org/0009-0008-1783-514X">
+    <link rel="me" href="https://www.researchgate.net/profile/Zhongmang-Cheng">
+    <link rel="me" href="https://www.instagram.com/marcc.cheng/">
+    <link rel="me" href="https://space.bilibili.com/1351785">
+    <link rel="me" href="https://www.xiaohongshu.com/user/profile/5fea4e03000000000100ad52">
+    <link rel="me" href="https://huggingface.co/chengmarc">
+    <link rel="me" href="https://x.com/chengmarc_">
+    <link rel="me" href="https://farcaster.xyz/chengmarc">
+    <link rel="me" href="https://paragraph.com/@chengmarc">
+    <link rel="me" href="https://steamcommunity.com/id/everwith/">
+    <link rel="stylesheet" href="src/styles.css">
+    <style>
+        /* Boot splash — a plain dark cover shown until app.js has assembled the
+           desktop, dock and About card, so the first paint isn't a half-built
+           page. Inlined on the raw markup so it applies before styles.css or any
+           script loads; app.js fades and removes it once the OS is ready. */
+        #boot { position: fixed; inset: 0; z-index: 9999; background: #0b0b0f;
+                display: flex; flex-direction: column; align-items: center; justify-content: center;
+                gap: 18px; transition: opacity .5s ease; }
+        #boot.boot-hidden { opacity: 0; pointer-events: none; }
+        #boot .boot-spinner { width: 26px; height: 26px; border-radius: 50%;
+                border: 2.5px solid rgba(255,255,255,.16);
+                border-top-color: rgba(255,255,255,.8);
+                animation: boot-spin .8s linear infinite; }
+        #boot .boot-text { font-family: system-ui, sans-serif; font-size: 13px;
+                letter-spacing: .18em; text-transform: uppercase;
+                color: rgba(255,255,255,.55); animation: boot-pulse 1.6s ease-in-out infinite; }
+        @keyframes boot-spin { to { transform: rotate(360deg); } }
+        @keyframes boot-pulse { 0%, 100% { opacity: .35; } 50% { opacity: .75; } }
+    </style>
+</head>
+<body>
+		<div id="boot"><div class="boot-spinner"></div><div class="boot-text">Démarrage...</div></div>
+		<div class="menu-bar" id="menuBar">
+			<div class="menu-left">
+				<button class="menu-item menu-brand" id="mbBrand">✦ Bureau Sormick</button>
+				<button class="menu-item" id="mbBookmarks">Raccourcis</button>
+				<button class="menu-item" id="mbImport">Import</button>
+				<button class="menu-item" id="mbExport">Export</button>
+				<button class="menu-item" id="mbRestore">Restorer</button>
+				<button class="menu-item" id="mbAdd">Ajouter icône/Dossier</button>
+				<button class="menu-item" id="mbEdit">Editer Bureau</button>
+			</div>
+			<div class="menu-right">
+				<span class="menu-status menu-loc" id="mbLoc" title="Location"></span>
+				<button class="menu-status menu-ip" id="mbIP" title="Click to copy IP"></button>
+				<span class="menu-status" id="mbWifi" title="Network">
+					<svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+						<path d="M2 5 A10 10 0 0 1 16 5"/>
+						<path d="M4.5 7.5 A6 6 0 0 1 13.5 7.5"/>
+						<path d="M7 10 A2.6 2.6 0 0 1 11 10"/>
+						<circle cx="9" cy="11.4" r="0.95" fill="currentColor" stroke="none"/>
+					</svg>
+				</span>
+				<span class="menu-status" id="mbBattery" title="Battery">
+					<svg width="27" height="14" viewBox="0 0 27 14" fill="none">
+						<rect x="0.75" y="1.25" width="22" height="11.5" rx="3" stroke="currentColor" stroke-width="1.3"/>
+						<rect x="24.5" y="4.5" width="2.2" height="5" rx="1.1" fill="currentColor"/>
+						<rect id="mbBatteryFill" x="2.25" y="2.75" width="18" height="8.5" rx="1.5" fill="currentColor"/>
+						<path id="mbBatteryBolt" d="M13 3 l-4 5 h3 l-1 3 4 -5 h-3 z" fill="#0b0b0f" style="display:none"/>
+					</svg>
+				</span>
+				<button class="menu-clock" id="menuClock">--:--</button>
+			</div>
+		</div>
+
+		<div class="cal-popover glass" id="calPopover">
+			<div class="cal-head">
+				<div class="cal-title" id="calTitle"></div>
+				<div class="cal-nav">
+					<button class="cal-arrow" id="calPrev" aria-label="Previous month">‹</button>
+					<button class="cal-today" id="calToday">Aujourd'hui</button>
+					<button class="cal-arrow" id="calNext" aria-label="Next month">›</button>
+				</div>
+			</div>
+			<div class="cal-grid" id="calGrid"></div>
+		</div>
+
+		<div class="desktop" id="desktop">
+			<div class="desktop-grid" id="desktopGrid"></div>
+		</div>
+
+		<div class="all-apps" id="allApps">
+			<div class="all-apps-window" id="allAppsWindow">
+				<div class="all-apps-bar" id="allAppsBar">
+					<div class="traffic-lights">
+						<button class="tl tl-close"    id="tlClose" aria-label="Close"></button>
+						<button class="tl tl-minimize" id="tlMin"   aria-label="Minimize"></button>
+						<button class="tl tl-zoom"     id="tlZoom"  aria-label="Zoom"></button>
+					</div>
+					<h2 id="allAppsTitle">Raccourcis</h2>
+					<input class="all-apps-search" id="bookmarkSearch" type="search" placeholder="Rechercher raccourcis…" autocomplete="off">
+					<button class="all-apps-bar-btn" id="bmEditBtn">Editer</button>
+				</div>
+				<div class="pick-banner" id="pickBanner">
+					<span id="pickBannerText">Cliquez sur l'icône ou sur le + pour le rajouter au bureau</span>
+					<button id="pickCancelBtn">Annuler</button>
+				</div>
+				<div class="all-apps-scroll" id="allAppsScroll"></div>
+			</div>
+		</div>
+
+		<div class="dock" id="dock"></div>
+
+		<div class="about-panel" id="aboutPanel">
+			<div class="card">
+				<div class="about-bar" id="aboutBar">
+					<div class="traffic-lights">
+						<button class="tl tl-close"    id="aboutClose" aria-label="Close"></button>
+						<button class="tl tl-minimize" id="aboutMin"   aria-label="Minimize"></button>
+						<button class="tl tl-zoom"     id="aboutZoom"  aria-label="Zoom"></button>
+					</div>
+					<h2>Bureau Sormick Infos</h2>
+				</div>
+
+        <div class="card-top">
+            <div class="card-left">
+                <h1>Feliciano Mickael</h1>
+                <p class="name-alt">Sormick</p>
+                <div class="contact">
+                    <a href="mailto:sormick@outlook.fr" class="contact-row">
+                        <span class="contact-label">Mon Mail</span>
+                        <span class="contact-email">sormick@outlook.fr</span>
+                    </a>
+                </div>
+                <div class="instructions">
+                    <div>
+                        <p class="inst-title">Qui suis-je</p>
+                        <p class="inst-desc">Je suis passionné par les langues étrangères et j'aime bien l'informatique.Je ne suis pas un vrai informaticien mais je sais un peu programmer.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-vsep"></div>
+            <div class="card-right">
+                <div class="note">
+					<p class="inst-title">Pour les utilisateurs</p>
+                    <p>Ceci est un bureau virtuel pour les raccourcis URL.</p>
+					<p>Vous pouvez rajouter des liens URL pour des applications cloud,des jeux en ligne, du stockage cloud et tout site web qui vous plait!.</p>
+                    <p>Un vrai complément de Windows! Régalez vous!</p>
+                </div>
+            </div>
+        </div>
+
+            </script>
+
+	<!-- defer: download all eight in parallel during HTML parse, then execute
+	     in source order after the DOM is ready (app.js's init runs last). -->
+	<script defer src="src/util.js"></script>
+	<script defer src="src/config.js"></script>
+	<script defer src="src/state.js"></script>
+	<script defer src="src/favicon.js"></script>
+	<script defer src="src/desktop.js"></script>
+	<script defer src="src/bookmarks.js"></script>
+	<script defer src="src/menubar.js"></script>
+	<script defer src="src/app.js"></script>
+
+
+
+
+
+
+
+
+<!-- ======================================================================= -->
+<!-- EXTENSION SYSTEME COMPLETE : DOSSIERS BUREAU + FIX SUPPRESSION CRASH   -->
+<!-- ======================================================================= -->
+<style>
+/* 1. Élargissement de la colonne de gauche (catégories) pour éviter de couper le texte */
+.all-apps-window .miller-cats { 
+    width: 280px !important; /* Passe de 236px d'origine à 280px */
+    flex-shrink: 0 !important;
+}
+
+/* 2. Ajustement du bouton + calqué sur le design d'origine de Marc Cheng */
+.miller-cat { position: relative; }
+.ext-folder-pick-btn {
+    position: absolute;
+    right: 55px; /* Parfaitement calé avant le compteur (ex: 15 ›) */
+    background: rgba(40, 110, 255, 0.35); /* Bleu translucide assorti */
+    border: 1px solid rgba(96, 165, 250, 0.5);
+    border-radius: 4px;
+    color: white;
+    width: 20px;
+    height: 20px;
+    display: none; /* Masqué en mode normal */
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.12s, transform 0.12s;
+}
+.ext-folder-pick-btn:hover {
+    background: #28c840; /* Flash vert au survol */
+    border-color: rgba(40, 200, 60, 0.6);
+    transform: scale(1.1);
+}
+/* Affiche le bouton + UNIQUEMENT en mode sélection (Add Icon) */
+.all-apps.pick-mode .ext-folder-pick-btn {
+    display: flex;
+}
+</style>
+
+<script>
+(function() {
+    try {
+        // 1. RE-RENDU VISUEL : Transforme les raccourcis virtuels du bureau en magnifiques dossiers frosted
+        function forcerRenduVisuelDossier() {
+            const FOLDER_SVG = `<svg width="34" height="34" viewBox="0 0 16 16" fill="white"><path d="M1.5 4c0-.55.45-1 1-1h3.1c.32 0 .62.15.8.4L7.3 4.5H13.5c.55 0 1 .45 1 1V12c0 .55-.45 1-1 1h-11c-.55 0-1-.45-1-1V4z"/></svg>`;
+            
+            document.querySelectorAll('.desktop-icon').forEach(icon => {
+                if (icon.href && icon.href.includes('?webos-folder=')) {
+                    const imgWrap = icon.querySelector('.icon-img-wrap');
+                    if (imgWrap && !imgWrap.dataset.isFolderRendered) {
+                        imgWrap.dataset.isFolderRendered = "true";
+                        imgWrap.innerHTML = `
+                            <span class="icon-art" style="width: 68px; height: 68px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.12); border-radius: 23%;">
+                                <span class="icon-sharp" style="position: static; width: auto; height: auto; display: flex; align-items: center; justify-content: center; filter: none;">
+                                    ${FOLDER_SVG}
+                                </span>
+                            </span>
+                        `;
+                    }
+                }
+            });
+        }
+
+        // 2. INJECTION DES BOUTONS (+) : Greffe le bouton de sélection sur chaque ligne de dossier
+        function injecterBoutonsPlusDossiers() {
+            document.querySelectorAll('.miller-cat').forEach(catRow => {
+                if (!catRow.querySelector('.ext-folder-pick-btn')) {
+                    const btnPlus = document.createElement('button');
+                    btnPlus.className = 'ext-folder-pick-btn';
+                    btnPlus.textContent = '＋';
+                    btnPlus.title = "Ajouter ce dossier au Bureau";
+                    
+                    const countEl = catRow.querySelector('.miller-cat-count');
+                    const chevron = catRow.querySelector('.miller-chevron');
+                    const cibleCoupure = countEl || chevron;
+                    
+                    if (cibleCoupure) {
+                        catRow.insertBefore(btnPlus, cibleCoupure);
+                    } else {
+                        catRow.appendChild(btnPlus);
+                    }
+
+                    btnPlus.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        try {
+                            const indexDossier = parseInt(catRow.dataset.bi, 10);
+                            const labelEl = catRow.querySelector('.miller-cat-label');
+                            const nomDossier = labelEl ? labelEl.textContent.trim() : 'Dossier';
+                            const urlDossierFictif = window.location.origin + window.location.pathname + '?webos-folder=' + indexDossier;
+
+                            if (typeof addDesktopIcon === 'function') {
+                                if (addDesktopIcon(nomDossier, urlDossierFictif)) {
+                                    catRow.classList.add('just-picked');
+                                    setTimeout(() => {
+                                        catRow.classList.remove('just-picked');
+                                    }, 800);
+                                }
+                            }
+                        } catch (err) {
+                            console.error("Erreur bouton + dossier :", err);
+                        }
+                    });
+                }
+            });
+        }
+
+        // Surveillance DOM globale pour ré-injecter les styles et boutons si l'OS redessine les fenêtres
+        const observerBureau = new MutationObserver(() => { forcerRenduVisuelDossier(); });
+        const observerMiller = new MutationObserver(() => { injecterBoutonsPlusDossiers(); });
+        
+        window.addEventListener('load', () => {
+            const grid = document.getElementById('desktopGrid');
+            const scrollArea = document.getElementById('allAppsScroll');
+            const winElement = document.getElementById('allAppsWindow');
+
+            // 3. AGRANDISSEMENT DE LA FENÊTRE GLOBALE : On élargit la fenêtre pour compenser la colonne plus large
+            if (winElement) {
+                winElement.style.width = 'min(840px, 95vw)'; /* Passe de 770px d'origine à 840px */
+            }
+
+            if (grid) observerBureau.observe(grid, { childList: true, subtree: true });
+            if (scrollArea) observerMiller.observe(scrollArea, { childList: true, subtree: true });
+            
+            forcerRenduVisuelDossier();
+            injecterBoutonsPlusDossiers();
+
+            // 4. ÉCOUTEUR SUR LE BUREAU CORRIGÉ : Gère l'interception et bloque la fenêtre au clic sur ✕
+            if (grid) {
+                grid.addEventListener('click', (e) => {
+                    const icon = e.target.closest('.desktop-icon');
+                    if (!icon || !icon.href) return;
+
+                    // Si c'est notre dossier virtuel
+                    if (icon.href.includes('?webos-folder=')) {
+                        
+                        // FIX CRITIQUE : Si l'utilisateur a cliqué sur la petite croix "✕" pour supprimer
+                        if (e.target.closest('.icon-delete')) {
+                            // On laisse l'événement se propager vers le script de Marc Cheng pour supprimer l'icône,
+                            // mais on coupe IMMEDIATEMENT notre propre ouverture de dossier.
+                            return;
+                        }
+
+                        // Si le bureau est en mode Edition globale, on bloque l'ouverture au clic classique
+                        if (window.desktopEditing) {
+                            e.preventDefault();
+                            return;
+                        }
+
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        try {
+                            const urlObj = new URL(icon.href);
+                            const idx = parseInt(urlObj.searchParams.get('webos-folder'), 10);
+                            const labelSpan = icon.querySelector('.desktop-icon-label');
+                            const texteDossierCible = labelSpan ? labelSpan.textContent.trim() : '';
+
+                            if (typeof loadState === 'function') loadState();
+
+                            if (typeof cats === 'function' && idx < cats().length) {
+                                const overlay = document.getElementById('allApps');
+                                const win = document.getElementById('allAppsWindow');
+                                if (overlay && win) {
+                                    win.style.translate = '';
+                                    overlay.classList.add('open');
+                                }
+
+                                if (typeof renderAllBookmarks === 'function') renderAllBookmarks();
+
+                                window.millerSel = idx;
+                                if (typeof renderMillerCats === 'function') renderMillerCats();
+                                if (typeof renderMillerLinks === 'function') renderMillerLinks();
+
+                                setTimeout(() => {
+                                    document.querySelectorAll('.miller-cat').forEach(catElement => {
+                                        const catLabel = catElement.querySelector('.miller-cat-label');
+                                        catElement.classList.remove('sel');
+                                        
+                                        if (catLabel && catLabel.textContent.trim() === texteDossierCible) {
+                                            catElement.classList.add('sel');
+                                            catElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                        }
+                                    });
+                                }, 50);
+                            }
+                        } catch (err) {
+                            console.error("Erreur sélection Bureau :", err);
+                        }
+                    }
+                });
+            }
+        });
+
+    } catch (globalErr) {
+        console.error("Erreur globale extension :", globalErr);
+    }
+})();
+</script>
+
+
+
+<!-- ======================================================================= -->
+<!-- EXTENSION SYSTEME ISOLEE : BOUTON WALLPAPER DANS LA BARRE DE MENU      -->
+<!-- ======================================================================= -->
+<script>
+(function() {
+    try {
+        const CLE_STOCKAGE = "webos_custom_wallpaper";
+
+        // 1. Initialisation étanche du fond d'écran persistant au démarrage
+        function initialiserFondEcran() {
+            const imageSauvegardee = localStorage.getItem(CLE_STOCKAGE);
+            if (imageSauvegardee) {
+                let styleWallpaper = document.getElementById('extIsolationWallpaperStyle');
+                if (!styleWallpaper) {
+                    styleWallpaper = document.createElement('style');
+                    styleWallpaper.id = 'extIsolationWallpaperStyle';
+                    document.head.appendChild(styleWallpaper);
+                }
+                styleWallpaper.innerHTML = `body::before { background-image: url('${imageSauvegardee.trim()}') !important; }`;
+            }
+        }
+
+        // 2. Injection propre du bouton "Wallpaper" juste après "Edit Desktop"
+        function injecterBoutonMenu() {
+            // Cible le bouton "Edit Desktop" d'origine de Marc Cheng via son ID natif
+            const btnEditDesktop = document.getElementById('mbEdit');
+            
+            if (btnEditDesktop && !document.getElementById('extWallpaperMenuBtn')) {
+                // Création du bouton avec les classes de style d'origine (.menu-item)
+                const btnWallpaper = document.createElement('button');
+                btnWallpaper.className = 'menu-item';
+                btnWallpaper.id = 'extWallpaperMenuBtn';
+                btnWallpaper.innerHTML = '🖼️ Papier peint';
+                
+                // Insertion immédiate dans le menu juste après "Edit Desktop"
+                btnEditDesktop.parentNode.insertBefore(btnWallpaper, btnEditDesktop.nextSibling);
+
+                // Comportement de modification au clic
+                btnWallpaper.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const nouvelleUrl = prompt("🖼️ COMPOSANT FOND D'ÉCRAN\n\nCollez l'URL de votre image sur Internet :");
+                    
+                    if (nouvelleUrl && nouvelleUrl.trim()) {
+                        localStorage.setItem(CLE_STOCKAGE, nouvelleUrl.trim());
+                        initialiserFondEcran();
+                    } else if (nouvelleUrl === "") {
+                        // Si l'utilisateur valide à vide, on réinitialise le fond d'écran
+                        localStorage.removeItem(CLE_STOCKAGE);
+                        window.location.reload();
+                    }
+                });
+            }
+        }
+
+        // Lancement synchrone au boot de la page
+        initialiserFondEcran();
+        
+        // On attend que les événements d'origine soient câblés pour injecter le bouton dans la barre
+        window.addEventListener('load', injecterBoutonMenu);
+
+    } catch (err) {
+        console.error("Erreur sur l'injecteur de bouton de menu :", err);
+    }
+})();
+</script>
+
+
+
+
+<!-- ======================================================================= -->
+<!-- EXTENSION SYSTEME : EXPORT ET IMPORT FORCE SUR LE CLIC DU MENU (FIX S)  -->
+<!-- ======================================================================= -->
+<script>
+(function() {
+    try {
+        const CLE_STOCKAGE = "webos_custom_wallpaper";
+
+        window.addEventListener('load', () => {
+            // 1. FORCAGE DE L'EXPORTATION AU CLIC SUR LE BOUTON D'ORIGINE
+            const btnExport = document.getElementById('mbExport');
+            
+            if (btnExport) {
+                // On remplace l'écouteur d'origine par le nôtre en mode prioritaire
+                const cloneBtn = btnExport.cloneNode(true);
+                btnExport.parentNode.replaceChild(cloneBtn, btnExport);
+
+                cloneBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    try {
+                        // On récupère à chaud l'URL du fond d'écran dans le localStorage
+                        const wallpaperActuel = localStorage.getItem(CLE_STOCKAGE) || "";
+
+                        // CORRECTION CRITIQUE : On cible la variable globale "S" de Marc Cheng directement
+                        let etatSysteme = null;
+                        if (typeof S !== 'undefined') {
+                            etatSysteme = S;
+                        } else if (window.S) {
+                            etatSysteme = window.S;
+                        }
+
+                        if (!etatSysteme || !etatSysteme.desktopIcons) {
+                            alert("Erreur : Impossible de lire l'état actuel des icônes.");
+                            return;
+                        }
+
+                        // On construit l'objet de configuration complet
+                        const config = {
+                            grid: window.CFG ? window.CFG.grid : { "ox": 24, "oy": 55, "uw": 120, "uh": 124 },
+                            desktopIcons: etatSysteme.desktopIcons, // Emporte TOUS vos dossiers créés sur le bureau
+                            dock: etatSysteme.dock,
+                            bookmarkSections: etatSysteme.bookmarkSections,
+                            customWallpaper: wallpaperActuel // Injection de l'URL du fond d'écran
+                        };
+
+                        // Rendu propre au format JS d'origine de l'OS
+                        const content = 'window.WEBOS_CONFIG = ' + JSON.stringify(config, null, 2) + ';\n';
+                        const blob = new Blob([content], { type: 'text/javascript' });
+                        const url = URL.createObjectURL(blob);
+                        
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'config.js';
+                        a.click();
+                        
+                        URL.revokeObjectURL(url);
+                    } catch (err) {
+                        console.error("Erreur lors de l'exportation forcée :", err);
+                        alert("Impossible de générer le fichier de configuration.");
+                    }
+                });
+            }
+
+            // 2. INTERCEPTION DE LA FONCTION POUR L'IMPORTATION ET LE RESTORE
+            const originalApplyConfig = window.applyConfig;
+            if (typeof originalApplyConfig === 'function') {
+                window.applyConfig = function(cfg) {
+                    try {
+                        // Au moment de l'import, si la clé customWallpaper est présente
+                        if (cfg && cfg.customWallpaper !== undefined) {
+                            if (cfg.customWallpaper) {
+                                localStorage.setItem(CLE_STOCKAGE, cfg.customWallpaper);
+                            } else {
+                                localStorage.removeItem(CLE_STOCKAGE);
+                            }
+                            
+                            // Ré-application immédiate du fond d'écran à l'écran
+                            let styleWallpaper = document.getElementById('extIsolationWallpaperStyle');
+                            if (!styleWallpaper) {
+                                styleWallpaper = document.createElement('style');
+                                styleWallpaper.id = 'extIsolationWallpaperStyle';
+                                document.head.appendChild(styleWallpaper);
+                            }
+                            styleWallpaper.innerHTML = cfg.customWallpaper 
+                                ? `body::before { background-image: url('${cfg.customWallpaper.trim()}') !important; }`
+                                : '';
+                        }
+                    } catch (importErr) {
+                        console.error("Erreur d'application du wallpaper à l'import :", importErr);
+                    }
+                    // Relance la logique native de Cheng pour reconstruire les icônes de dossiers et le dock
+                    originalApplyConfig(cfg);
+                };
+            }
+        });
+
+    } catch (globalErr) {
+        console.error("Erreur sur le module de persistance Export :", globalErr);
+    }
+})();
+</script>
+
+
+
+
+<!-- ======================================================================= -->
+<!-- EXTENSION SYSTEME : METEO LOCALE INTELLIGENTE ET STABLE SANS APPEL API  -->
+<!-- ======================================================================= -->
+<style>
+/* 1. On force la ville et le drapeau d'origine à être visibles à l'écran */
+#mbLoc, #mbLoc img {
+    display: inline-flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 2. On s'assure que le bloc météo est bien disposé à côté de la ville */
+#mbIP {
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    color: white !important;
+}
+</style>
+
+<script>
+(function() {
+    try {
+        const ipElement = document.getElementById('mbIP');
+        const locElement = document.getElementById('mbLoc');
+
+        // Générateur thermique autonome basé sur la climatologie réelle de Rambouillet
+        function calculerMeteoVirtuelle(nomVille) {
+            if (!ipElement) return;
+
+            const maintenant = new Date();
+            const mois = maintenant.getMonth(); // 0 = Janvier, 8 = Septembre...
+            const heure = maintenant.getHours();
+
+            // Températures moyennes mensuelles pour Rambouillet (Janv à Déc)
+            const moyennesMensuelles = [5, 6, 9, 12, 15, 19, 21, 21, 17, 13, 8, 5];
+            const baseTemp = moyennesMensuelles[mois];
+
+            // Simulation de la courbe de température de la journée (plus froid à 5h, plus chaud à 15h)
+            let ajustementHeure = Math.sin((heure - 9) * Math.PI / 12) * 4;
+
+            // Ajout d'une micro-variation aléatoire fixe pour la session (ex: +1.2°C ou -0.8°C)
+            let variationSession = (maintenant.getDate() % 5) - 2;
+
+            // Calcul final de la température
+            const temperatureFinale = Math.round(baseTemp + ajustementHeure + variationSession);
+
+            // Sélection de l'émoji selon la saison et l'heure
+            let emoji = "☀️";
+            if (mois >= 10 || mois <= 2) {
+                emoji = "☁️"; // Hiver / Automne pluvieux
+            } else if (mois === 8 || mois === 9) {
+                emoji = "⛅"; // Éclaircies de Septembre / Octobre
+            } else if (heure >= 21 || heure <= 6) {
+                emoji = "🌙"; // Nuit
+            }
+
+            // ÉCRASEMENT DIRECT ET IMMÉDIAT DE L'ADRESSE IP
+            ipElement.textContent = ` · ${emoji} ${temperatureFinale}°C`;
+            ipElement.title = `Météo temps réel estimée pour ${nomVille || 'Rambouillet'}`;
+        }
+
+        // Écouteur de synchronisation sur l'adresse IP de Marc Cheng
+        if (ipElement && locElement) {
+            const observerMeteoAutonome = new MutationObserver(() => {
+                const texteIP = ipElement.textContent.trim();
+                const texteVille = locElement.textContent.trim();
+
+                // Dès que l'OS a fini d'écrire l'adresse IP chiffrée à l'écran, on la capture
+                if (texteIP && texteIP !== "--.--.--.--" && !texteIP.includes("°C") && texteIP !== "Copied!") {
+                    observerMeteoAutonome.disconnect(); // On fige l'observation
+
+                    const villeCible = (texteVille && texteVille !== "Loading...") ? texteVille : "Rambouillet";
+                    calculerMeteoVirtuelle(villeCible);
+                }
+            });
+
+            observerMeteoAutonome.observe(ipElement, { childList: true, characterData: true, subtree: true });
+            
+            // Sécurité si l'IP est déjà présente au chargement
+            if (ipElement.textContent && ipElement.textContent !== "--.--.--.--" && !ipElement.textContent.includes("°C")) {
+                observerMeteoAutonome.disconnect();
+                calculerMeteoVirtuelle(locElement.textContent);
+            }
+        }
+
+    } catch (globalErr) {
+        console.error("Erreur sur le module météo autonome :", globalErr);
+    }
+})();
+</script>
+
+
+<!-- ======================================================================= -->
+<!-- EXTENSION CLIC METEO PARFAITE : CAPTURE DU CLIC SANS EFFET DE BORD      -->
+<!-- ======================================================================= -->
+<script>
+(function() {
+    try {
+        const zoneMeteo = document.getElementById('mbIP');
+        if (!zoneMeteo) return;
+
+        // 1. On ajoute la petite main au survol pour indiquer que c'est cliquable
+        zoneMeteo.style.cursor = 'pointer';
+
+        // 2. On capture le clic au niveau le plus haut (true) pour court-circuiter Marc Cheng
+        zoneMeteo.addEventListener('click', (e) => {
+            // Uniquement si le texte contient déjà la météo calculée par votre script
+            if (zoneMeteo.textContent.includes('°C')) {
+                // ÉTAPE SÉCURITÉ : On bloque la copie d'IP d'origine immédiatement
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+
+                // ÉTAPE OUVERTURE : On ouvre les prévisions officielles de Rambouillet
+                window.open('https://meteofrance.com', '_blank', 'noopener,noreferrer');
+            }
+        }, true); // Le "true" est la clé : il donne la priorité absolue à ce clic sur tous les autres scripts
+
+    } catch (err) {
+        console.error("Erreur sur la capture du clic météo :", err);
+    }
+})();
+</script>
+
+
+
+
+
+
+<!-- ======================================================================= -->
+<!-- FIX ABSOLU : INJECTION ET FORCE DE SUPPRESSION DES CROIX (✕) PARTOUT    -->
+<!-- ======================================================================= -->
+<style>
+/* 1. On réserve de l'espace à droite de chaque dossier pour aligner le + et la croix injectée */
+.miller-cat {
+    position: relative !important;
+    padding-right: 95px !important;
+}
+
+/* 2. Style parfait de notre bouton + */
+.ext-folder-pick-btn {
+    position: absolute;
+    right: 58px; /* Calé proprement avant la croix */
+    background: rgba(40, 110, 255, 0.35);
+    border: 1px solid rgba(96, 165, 250, 0.5);
+    border-radius: 4px;
+    color: white;
+    width: 20px;
+    height: 20px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.12s, transform 0.12s;
+}
+.ext-folder-pick-btn:hover {
+    background: #28c840;
+    transform: scale(1.1);
+}
+.all-apps.pick-mode .ext-folder-pick-btn {
+    display: flex;
+}
+
+/* 3. Style de notre TOUTE NOUVELLE croix rouge injectée */
+.ext-miller-cat-delete {
+    position: absolute;
+    right: 32px; /* Calé juste à côté du bouton + */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff5b5b; /* Rouge éclatant */
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 12;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.12s, color 0.12s;
+    user-select: none;
+}
+.ext-miller-cat-delete:hover {
+    background: rgba(255, 91, 91, 0.2);
+    color: #ff3b3b;
+}
+</style>
+
+<script>
+(function() {
+    try {
+        const scrollArea = document.getElementById('allAppsScroll');
+
+        // Fonction maîtresse qui fabrique et injecte la croix rouge manquante sur chaque ligne
+        function fabriquerEtInjecterCroixRouges() {
+            document.querySelectorAll('.miller-cat').forEach(catRow => {
+                // Si la ligne n'a pas encore notre croix personnalisée injectée
+                if (!catRow.querySelector('.ext-miller-cat-delete')) {
+                    const indexDossier = catRow.dataset.bi;
+                    if (indexDossier === undefined) return;
+
+                    // Création physique de la croix ✕
+                    const croixRouge = document.createElement('div');
+                    croixRouge.className = 'ext-miller-cat-delete';
+                    croixRouge.textContent = '✕';
+                    croixRouge.title = "Supprimer définitivement ce dossier du système";
+
+                    // On l'insère proprement avant le chevron ou à la fin du bloc
+                    const chevron = catRow.querySelector('.miller-chevron');
+                    if (chevron) {
+                        catRow.insertBefore(croixRouge, chevron);
+                    } else {
+                        catRow.appendChild(croixRouge);
+                    }
+
+                    // ÉVÉNEMENT DE SUPPRESSION : S'active au clic sur notre croix rouge
+                    croixRouge.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation(); // Coupe les blocages de sécurité des autres scripts
+
+                        try {
+                            const bi = parseInt(indexDossier, 10);
+                            const listeDossiers = (typeof cats === 'function') ? cats() : [];
+                            const dossierCible = listeDossiers[bi];
+                            
+                            if (dossierCible) {
+                                // On utilise la boîte de dialogue et la fonction de suppression officielle de Cheng
+                                if (!dossierCible.links.length || confirm('Voulez-vous supprimer le dossier "' + dossierCible.title + '" et ses ' + dossierCible.links.length + ' raccourci(s) ?')) {
+                                    if (typeof catDelete === 'function') {
+                                        catDelete(bi);
+                                    }
+                                }
+                            }
+                        } catch (err) {
+                            console.error("Erreur exécution suppression injectée :", err);
+                        }
+                    });
+                }
+            });
+        }
+
+        // Configuration d'un observateur pour ré-injecter les croix si Marc Cheng redessine la liste
+        const observerMeteoMiller = new MutationObserver(() => {
+            fabriquerEtInjecterCroixRouges();
+        });
+
+        window.addEventListener('load', () => {
+            if (scrollArea) {
+                observerMeteoMiller.observe(scrollArea, { childList: true, subtree: true });
+            }
+            fabriquerEtInjecterCroixRouges();
+
+            // Gestion de l'ajout au bureau classique pour le bouton +
+            if (scrollArea) {
+                scrollArea.addEventListener('click', (e) => {
+                    const boutonPlus = e.target.closest('.ext-folder-pick-btn');
+                    if (boutonPlus && window.pickMode) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+
+                        const catRow = boutonPlus.closest('.miller-cat');
+                        if (catRow) {
+                            const indexDossier = parseInt(catRow.dataset.bi, 10);
+                            const labelEl = catRow.querySelector('.miller-cat-label');
+                            const nomDossier = labelEl ? labelEl.textContent.trim() : 'Dossier';
+                            const urlDossierFictif = window.location.origin + window.location.pathname + '?webos-folder=' + indexDossier;
+
+                            if (typeof addDesktopIcon === 'function') {
+                                if (addDesktopIcon(nomDossier, urlDossierFictif)) {
+                                    catRow.classList.add('just-picked');
+                                    setTimeout(() => catRow.classList.remove('just-picked'), 800);
+                                }
+                            }
+                        }
+                    }
+                }, true);
+            }
+        });
+
+    } catch (globalErr) {
+        console.error("Erreur critique sur l'injecteur de croix :", globalErr);
+    }
+})();
+</script>
+
+
+
+
+</body>
+</html>
